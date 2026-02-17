@@ -1,84 +1,97 @@
-# Système de Gestion de Bibliothèque - Guide d'Installation
+# Système de Gestion de Bibliothèque (Laravel 8)
 
-Ce guide vous permettra d'installer l'environnement de développement localement sur votre machine.
+Bienvenue sur le dépôt du projet de gestion de bibliothèque. Ce projet utilise **Laravel 8** avec le package **Breeze** pour l'authentification et **Tailwind CSS** pour le design.
 
 ## Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé :
 
-* **PHP** (8.0 ou +) & **MySQL** (via XAMPP, Laragon ou MAMP).
-* **Composer** (Gestionnaire de dépendances PHP).
-* **Node.js & NPM** (Pour le CSS/JS).
+* **PHP** (8.0 ou supérieur)
+* **MySQL** (via XAMPP, Laragon ou MAMP)
+* **Composer**
+* **Node.js & NPM**
 
 ---
 
-## Étapes d'installation
+##  Installation Rapide (Local)
 
-### 1. Extraction du projet
+1. **Cloner le projet**
+```bash
+git clone [LIEN_DE_TON_REPO_GITHUB]
+cd Gestion-biblio
 
-* Téléchargez le fichier `Projet_Base_V1.zip` depuis le Drive.
-* Extrayez-le dans votre dossier de projets (ex: `C:/xampp/htdocs/` ou votre dossier Bureau).
+```
 
-### 2. Installation des dépendances PHP
 
-Ouvrez un terminal dans le dossier du projet et lancez :
-
+2. **Installer les dépendances PHP**
 ```bash
 composer install
 
 ```
 
-*Cela va créer le dossier `vendor/` avec toutes les bibliothèques Laravel.*
 
-### 3. Configuration de la base de données
-
-1. Ouvrez votre navigateur sur **phpMyAdmin**.
-2. Créez une nouvelle base de données nommée : `gestion_biblio`.
-
-### 4. Configuration du fichier .env
-
-1. Dans le dossier du projet, trouvez le fichier `.env.example`.
-2. Renommez-le (ou faites une copie) en **`.env`**.
-3. Ouvrez le fichier `.env` avec un éditeur (VS Code ou Bloc-notes) et modifiez ces lignes :
-
-**Pour Windows (XAMPP) :**
-
+3. **Configuration de la Base de Données**
+* Créez une base de données nommée `gestion_biblio` dans votre PHPMyAdmin.
+* Copiez le fichier d'exemple : `cp .env.example .env`
+* Modifiez votre fichier `.env` avec vos accès locaux :
 ```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
 DB_DATABASE=gestion_biblio
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD= (vide ou 'root')
 
 ```
 
-*(Laissez le mot de passe vide si vous n'en avez pas mis sur XAMPP).*
 
-### 5. Initialisation de l'application
 
-Retournez dans le terminal et exécutez ces deux commandes :
 
+4. **Initialisation**
 ```bash
 php artisan key:generate
 php artisan migrate
 
 ```
 
-*La première sécurise l'application, la seconde crée les tables dans votre base de données.*
 
-### 6. Lancement du projet
-
+5. **Lancer le serveur**
 ```bash
 php artisan serve
 
 ```
 
-Accédez ensuite à l'adresse : [http://127.0.0.1:8000]()
+
+Accédez au projet sur : [http://127.0.0.1:8000]()
 
 ---
 
-## 💡 Notes importantes
+## 📋 PROTOCOLE DE TRAVAIL (Important)
 
-* **Design :** Si le design ne s'affiche pas (pas de CSS), vérifiez que vous avez bien le dossier `public/css`.
-* **Erreurs :** En cas d'erreur de connexion à la base de données, vérifiez bien le port (3306 pour XAMPP, 8889 pour MAMP).
+Pour garantir une bonne note et assurer que le professeur voit l'activité de **chaque membre**, nous suivons strictement ce protocole hybride entre GitHub et le Drive.
+
+### Le Cycle de Développement
+
+À chaque fois que vous terminez une tâche ou un fichier :
+
+1. **GITHUB (Le Code propre)** :
+Faites un `git add`, `git commit` et `git push` de votre travail. C'est notre base de code officielle.
+2. **DRIVE (La Preuve pour le prof)** :
+Uploadez ou remplacez immédiatement les fichiers modifiés dans les dossiers correspondants sur Google Drive.
+* *Pourquoi ?* Le professeur vérifie l'historique d'activité du Drive. En "remplaçant" le fichier, votre nom et l'heure de modification apparaissent.
+
+
+3. **SHEET (Le Suivi)** :
+Mettez à jour notre fichier Google Sheet en passant le statut de votre tâche de `EN COURS` à `TERMINÉ`.
+
+---
+
+### ⚠️ Règles de sécurité et de synchronisation
+
+* **AVANT DE COMMENCER N'OUBLIER PAS :** Faites toujours un `git fetch ` puis ` git  pull`. Si vous travaillez sur une version périmée, vous allez créer des erreurs lors de l'upload.
+* **MIGRATIONS :** Si un collègue a ajouté une nouvelle table, vous verrez un nouveau fichier dans `database/migrations/`. Tapez impérativement `php artisan migrate` sur votre PC pour mettre à jour votre base de données locale.
+* **FICHIERS INTERDITS SUR LE DRIVE !!! :**
+* Ne jamais uploader le dossier `vendor/` ou `node_modules/`.
+* Ne jamais remplacer le fichier `.env` (gardez votre config locale).
+
+
+* **FICHIERS PARTAGÉS :** Pour les fichiers communs comme `routes/web.php` ou le design global, prévenez sur le groupe WhatsApp avant de les remplacer sur le Drive pour éviter d'écraser le travail d'un autre.
+
+---
