@@ -185,6 +185,14 @@
 
     <div class="page-bg py-10 px-4">
         <div style="max-width: 1100px; margin: 0 auto;">
+        {{-- bouton ajouter visible jsute pour l'admin --}}
+        @if(Auth::user()->role == 'admin')
+            <div style="text-align: right; margin-bottom: 16px;">
+                <a href="{{ route('books.create') }}" style="background-color: #1a2332; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+                    ajouter un livre
+                </a>
+            </div>
+        @endif
 
             {{-- titre + recherche --}}
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px;">
