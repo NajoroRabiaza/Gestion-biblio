@@ -14,7 +14,7 @@ Avant de commencer, assurez-vous d'avoir installé :
 
 1. **Cloner le projet**
 ```bash
-git clone [LIEN_DE_TON_REPO_GITHUB]
+git clone [LIEN_DE_CE_REPO_GITHUB_QUI_SOIT_DU_SSH_OU_HTTP]
 cd Gestion-biblio
 ```
 
