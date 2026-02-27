@@ -22,8 +22,15 @@ cd Gestion-biblio
 ```bash
 composer install
 ```
+> 📦 *C'est quoi ?* Composer c'est le gestionnaire de paquets PHP. Cette commande lit le fichier `composer.json` et télécharge toutes les librairies PHP dont Laravel a besoin. Elle crée le dossier `vendor/`. Sans ça, rien ne marche.
 
-3. **Configuration de la Base de Données**
+3. **Installer les dépendances JavaScript**
+```bash
+npm install
+```
+> 📦 *C'est quoi ?* Pareil que Composer mais pour le JavaScript. Cette commande télécharge Tailwind CSS et tous les outils front-end. Elle crée le dossier `node_modules/`. À faire une seule fois.
+
+4. **Configuration de la Base de Données**
 * Créez une base de données nommée `gestion_biblio` dans votre PHPMyAdmin.
 * Copiez le fichier d'exemple : `cp .env.example .env`
 * Modifiez votre fichier `.env` avec vos accès locaux :
@@ -33,21 +40,31 @@ DB_USERNAME=root
 DB_PASSWORD= (vide ou 'root')
 ```
 
-4. **Initialisation**
+5. **Initialisation**
 ```bash
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
 ```
-
 > ⚠️ Le `php artisan db:seed` est obligatoire ! Il insère les données de test dans la base de données (catégories, auteurs, livres, et comptes utilisateurs). Sans ça, l'application sera vide.
 
-5. **Lancer le serveur**
+---
+
+## Lancer le projet (à faire à chaque fois)
+
+> ⚠️ Ces deux commandes sont à lancer **à chaque fois** que vous travaillez sur le projet. Il faut ouvrir **deux terminaux en même temps**.
+
+**Terminal 1 — Le serveur PHP (backend)**
 ```bash
 php artisan serve
 ```
+> 🖥️ *C'est quoi ?* C'est le serveur local de Laravel. Il permet d'accéder au projet dans le navigateur sur `http://127.0.0.1:8000`. Sans cette commande, vous ne pouvez pas voir le site.
 
-Accédez au projet sur : [http://127.0.0.1:8000]()
+**Terminal 2 — Le compilateur CSS/JS (frontend)**
+```bash
+npm run dev
+```
+> 🎨 *C'est quoi ?* Cette commande compile le CSS Tailwind et le JavaScript du projet. Si vous ne la lancez pas, le design ne s'affichera pas — la page sera sans style, juste du texte brut. Laissez ce terminal ouvert pendant que vous travaillez.
 
 ---
 
@@ -70,8 +87,8 @@ Une fois le seeder lancé, vous pouvez vous connecter avec ces comptes :
 | Étape 6 | Migrations + Modèles Eloquent | ✅ Terminé |
 | Étape 7 | Authentification Laravel Breeze | ✅ Terminé |
 | Étape 6bis | Seeders (données de test) | ✅ Terminé |
-| Étape 8 | Affichage catalogue livres | 🔄 En cours |
-| Étape 9 | Mise en page et design | ⏳ À faire |
+| Étape 8 | Affichage catalogue livres | ✅ Terminé |
+| Étape 9 | Mise en page et design | ✅ Terminé |
 | Étape 10 | Formulaire ajout livre (Admin) | ⏳ À faire |
 
 ---
