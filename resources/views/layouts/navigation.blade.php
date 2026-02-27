@@ -12,6 +12,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    {{-- j'ajoute le lien vers le catalogue de livres --}}
+                    <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
+                        {{ __('Livres') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -58,6 +63,11 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            {{-- lien livres pour mobile aussi --}}
+            <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
+                {{ __('Livres') }}
             </x-responsive-nav-link>
         </div>
 
