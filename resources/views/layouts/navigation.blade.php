@@ -24,6 +24,13 @@
                             {{ __('Mes Emprunts') }}
                         </x-nav-link>
                     @endif
+
+                    {{-- lien Gestion Retours visible seulement pour l'admin --}}
+                    @if(Auth::user()->role == 'admin')
+                        <x-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
+                            {{ __('Retours') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -81,6 +88,13 @@
             @if(Auth::user()->role == 'client')
                 <x-responsive-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
                     {{ __('Mes Emprunts') }}
+                </x-responsive-nav-link>
+            @endif
+
+            {{-- lien Retours pour mobile admin --}}
+            @if(Auth::user()->role == 'admin')
+                <x-responsive-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
+                    {{ __('Retours') }}
                 </x-responsive-nav-link>
             @endif
         </div>

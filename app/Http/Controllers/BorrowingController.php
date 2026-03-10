@@ -16,7 +16,6 @@ class BorrowingController extends Controller
         $user = Auth::user();
         $book = Book::findOrFail($bookId);
 
-        // je vérifie que le livre est disponible
         if ($book->available_copies <= 0) {
             return response()->json([
                 'success' => false,
@@ -24,7 +23,6 @@ class BorrowingController extends Controller
             ]);
         }
 
-        // je vérifie que le client peut encore emprunter
         if ($user->current_borrowings >= $user->max_borrowings) {
             return response()->json([
                 'success' => false,
@@ -32,7 +30,6 @@ class BorrowingController extends Controller
             ]);
         }
 
-        // je vérifie que le client n'est pas bloqué
         if (!$user->can_borrow) {
             return response()->json([
                 'success' => false,
@@ -40,7 +37,6 @@ class BorrowingController extends Controller
             ]);
         }
 
-        // je vérifie que le client n'a pas déjà emprunté ce même livre sans l'avoir rendu
         $dejaEmprunte = Borrowing::where('user_id', $user->id)
             ->where('book_id', $book->id)
             ->where('status', 'en_cours')
@@ -53,7 +49,6 @@ class BorrowingController extends Controller
             ]);
         }
 
-        // tout est bon, je crée l'emprunt
         Borrowing::create([
             'user_id'     => $user->id,
             'book_id'     => $book->id,
@@ -62,10 +57,7 @@ class BorrowingController extends Controller
             'status'      => 'en_cours',
         ]);
 
-        // je décrémente le nombre d'exemplaires disponibles
         $book->decrement('available_copies');
-
-        // je mets à jour le compteur d'emprunts du client
         $user->increment('current_borrowings');
 
         return response()->json([
@@ -79,19 +71,13 @@ class BorrowingController extends Controller
     {
         $user = Auth::user();
 
-        // je cherche l'emprunt et je vérifie qu'il appartient bien au client connecté
         $emprunt = Borrowing::where('id', $borrowingId)
             ->where('user_id', $user->id)
             ->where('status', 'en_cours')
             ->firstOrFail();
 
-        // je remet l'exemplaire disponible
         $emprunt->book->increment('available_copies');
-
-        // je décrémente le compteur d'emprunts du client
         $user->decrement('current_borrowings');
-
-        // je supprime l'emprunt
         $emprunt->delete();
 
         return redirect()->route('borrowings.mes-emprunts')->with('success', 'L\'emprunt a été annulé.');
@@ -108,5 +94,37 @@ class BorrowingController extends Controller
             ->get();
 
         return view('borrowings.mes-emprunts', compact('emprunts'));
+    }
+
+    // admin — liste tous les emprunts en cours
+    public function adminEmprunts()
+    {
+        // je récupère tous les emprunts en cours ou en retard, avec les infos du livre et du client
+        $emprunts = Borrowing::with('book', 'user')
+            ->whereIn('status', ['en_cours', 'en_retard'])
+            ->orderBy('due_date', 'asc')
+            ->get();
+
+        return view('admin.emprunts.index', compact('emprunts'));
+    }
+
+    // admin — valider le retour d'un livre
+    public function validerRetour($borrowingId)
+    {
+        $emprunt = Borrowing::with('book', 'user')->findOrFail($borrowingId);
+
+        // je mets à jour le statut et la date de retour réelle
+        $emprunt->update([
+            'status'      => 'retourne',
+            'return_date' => Carbon::today(),
+        ]);
+
+        // je remet l'exemplaire disponible
+        $emprunt->book->increment('available_copies');
+
+        // je décrémente le compteur d'emprunts du client
+        $emprunt->user->decrement('current_borrowings');
+
+        return redirect()->route('admin.emprunts')->with('success', 'Le retour a été validé.');
     }
 }
