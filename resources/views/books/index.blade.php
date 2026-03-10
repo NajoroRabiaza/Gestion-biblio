@@ -174,25 +174,101 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* petit délai pour chaque carte sur l'animation */
         .book-card:nth-child(1) { animation-delay: 0.05s; }
         .book-card:nth-child(2) { animation-delay: 0.10s; }
         .book-card:nth-child(3) { animation-delay: 0.15s; }
         .book-card:nth-child(4) { animation-delay: 0.20s; }
         .book-card:nth-child(5) { animation-delay: 0.25s; }
         .book-card:nth-child(6) { animation-delay: 0.30s; }
+
+        /* --- boutons modifier / supprimer --- */
+        .card-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 52px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            background: linear-gradient(to left, rgba(255,255,255,0.97) 60%, transparent);
+            border-radius: 0 12px 12px 0;
+            padding-right: 10px;
+        }
+
+        .book-card:hover .card-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, transform 0.15s;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-edit {
+            background-color: #1a2332;
+            color: #ffffff;
+        }
+
+        .btn-edit:hover {
+            background-color: #2c3e55;
+        }
+
+        .btn-delete {
+            background-color: #1a2332;
+            color: #ffffff;
+        }
+
+        .btn-delete:hover {
+            background-color: #2c3e55;
+        }
+
+        /* message flash */
+        .flash-success {
+            background-color: #ecfdf5;
+            border: 1.5px solid #6ee7b7;
+            color: #065f46;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
     </style>
 
     <div class="page-bg py-10 px-4">
         <div style="max-width: 1100px; margin: 0 auto;">
-        {{-- bouton ajouter visible jsute pour l'admin --}}
-        @if(Auth::user()->role == 'admin')
-            <div style="text-align: right; margin-bottom: 16px;">
-                <a href="{{ route('books.create') }}" style="background-color: #1a2332; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
-                    ajouter un livre
-                </a>
-            </div>
-        @endif
+
+            {{-- message flash --}}
+            @if(session('success'))
+                <div class="flash-success">{{ session('success') }}</div>
+            @endif
+
+            {{-- bouton ajouter visible seulement pour l'admin --}}
+            @if(Auth::user()->role == 'admin')
+                <div style="text-align: right; margin-bottom: 16px;">
+                    <a href="{{ route('books.create') }}" style="background-color: #1a2332; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+                        ajouter un livre
+                    </a>
+                </div>
+            @endif
 
             {{-- titre + recherche --}}
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px;">
@@ -254,6 +330,36 @@
                                 @endif
                             </div>
 
+                            {{-- boutons modifier / supprimer — visibles seulement pour l'admin au hover --}}
+                            @if(Auth::user()->role == 'admin')
+                                <div class="card-actions">
+
+                                    {{-- bouton modifier (icone crayon) --}}
+                                    <a href="{{ route('books.edit', $book->id) }}" class="action-btn btn-edit" title="Modifier">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
+                                    </a>
+
+                                    {{-- bouton supprimer (icone corbeille) --}}
+                                    <form method="POST" action="{{ route('books.destroy', $book->id) }}" onsubmit="return confirm('Supprimer ce livre ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="action-btn btn-delete" title="Supprimer">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6"/>
+                                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                                <path d="M10 11v6"/>
+                                                <path d="M14 11v6"/>
+                                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+
+                                </div>
+                            @endif
+
                         </div>
                     @endforeach
                 </div>
@@ -262,7 +368,7 @@
         </div>
     </div>
 
-    {{-- script pour la recherche de livre--}}
+    {{-- script pour la recherche de livre --}}
     <script>
         function filterBooks() {
             const input = document.getElementById('searchInput').value.toLowerCase();
