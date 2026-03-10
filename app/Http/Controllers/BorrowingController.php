@@ -74,6 +74,29 @@ class BorrowingController extends Controller
         ]);
     }
 
+    // le client annule un emprunt
+    public function annuler($borrowingId)
+    {
+        $user = Auth::user();
+
+        // je cherche l'emprunt et je vérifie qu'il appartient bien au client connecté
+        $emprunt = Borrowing::where('id', $borrowingId)
+            ->where('user_id', $user->id)
+            ->where('status', 'en_cours')
+            ->firstOrFail();
+
+        // je remet l'exemplaire disponible
+        $emprunt->book->increment('available_copies');
+
+        // je décrémente le compteur d'emprunts du client
+        $user->decrement('current_borrowings');
+
+        // je supprime l'emprunt
+        $emprunt->delete();
+
+        return redirect()->route('borrowings.mes-emprunts')->with('success', 'L\'emprunt a été annulé.');
+    }
+
     // le client voit ses emprunts
     public function mesEmprunts()
     {

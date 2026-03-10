@@ -26,4 +26,7 @@ Route::delete('/livres/{id}', [App\Http\Controllers\BookController::class, 'dest
 Route::post('/emprunter/{book}', [App\Http\Controllers\BorrowingController::class, 'emprunter'])->middleware('auth')->name('borrowings.emprunter');
 Route::get('/mes-emprunts', [App\Http\Controllers\BorrowingController::class, 'mesEmprunts'])->middleware('auth')->name('borrowings.mes-emprunts');
 
+// route pour annuler un emprunt
+Route::delete('/emprunts/{id}/annuler', [App\Http\Controllers\BorrowingController::class, 'annuler'])->middleware('auth')->name('borrowings.annuler');
+
 require __DIR__.'/auth.php';

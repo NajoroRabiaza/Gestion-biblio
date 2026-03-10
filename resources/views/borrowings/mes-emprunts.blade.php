@@ -160,6 +160,22 @@
             color: #9ca3af;
             margin-top: 2px;
         }
+        .btn-annuler {
+            background-color: transparent;
+            color: #9ca3af;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 7px;
+            padding: 5px 14px;
+            font-size: 0.8rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-annuler:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
     </style>
 
     <div class="page-bg py-10 px-4">
@@ -223,7 +239,7 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
                             @if($emprunt->status == 'en_cours')
                                 <span class="badge badge-en-cours">
                                     <span class="dot dot-blue"></span>
@@ -239,6 +255,17 @@
                                     <span class="dot dot-green"></span>
                                     Rendu
                                 </span>
+                            @endif
+
+                            {{-- bouton annuler seulement pour les emprunts en cours --}}
+                            @if($emprunt->status == 'en_cours')
+                                <form method="POST" action="{{ route('borrowings.annuler', $emprunt->id) }}" onsubmit="return confirm('Annuler cet emprunt ?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-annuler">
+                                        Annuler
+                                    </button>
+                                </form>
                             @endif
                         </div>
 
