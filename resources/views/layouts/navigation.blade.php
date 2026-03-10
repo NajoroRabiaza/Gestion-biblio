@@ -25,10 +25,16 @@
                         </x-nav-link>
                     @endif
 
-                    {{-- lien Gestion Retours visible seulement pour l'admin --}}
+                    {{-- liens admin --}}
                     @if(Auth::user()->role == 'admin')
                         <x-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                             {{ __('Retours') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.authors.index')" :active="request()->routeIs('admin.authors.*')">
+                            {{ __('Auteurs') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Catégories') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -91,10 +97,16 @@
                 </x-responsive-nav-link>
             @endif
 
-            {{-- lien Retours pour mobile admin --}}
+            {{-- liens admin mobile --}}
             @if(Auth::user()->role == 'admin')
                 <x-responsive-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                     {{ __('Retours') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.authors.index')" :active="request()->routeIs('admin.authors.*')">
+                    {{ __('Auteurs') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                    {{ __('Catégories') }}
                 </x-responsive-nav-link>
             @endif
         </div>
