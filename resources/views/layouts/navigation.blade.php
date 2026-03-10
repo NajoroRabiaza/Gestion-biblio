@@ -17,6 +17,13 @@
                     <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                         {{ __('Livres') }}
                     </x-nav-link>
+
+                    {{-- lien Mes Emprunts visible seulement pour le client --}}
+                    @if(Auth::user()->role == 'client')
+                        <x-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
+                            {{ __('Mes Emprunts') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -69,6 +76,13 @@
             <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                 {{ __('Livres') }}
             </x-responsive-nav-link>
+
+            {{-- lien Mes Emprunts pour mobile --}}
+            @if(Auth::user()->role == 'client')
+                <x-responsive-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
+                    {{ __('Mes Emprunts') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200">

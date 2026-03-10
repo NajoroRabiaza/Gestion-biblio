@@ -22,4 +22,8 @@ Route::get('/livres/{id}/edit', [App\Http\Controllers\BookController::class, 'ed
 Route::put('/livres/{id}', [App\Http\Controllers\BookController::class, 'update'])->middleware('auth')->name('books.update');
 Route::delete('/livres/{id}', [App\Http\Controllers\BookController::class, 'destroy'])->middleware('auth')->name('books.destroy');
 
+// routes pour les emprunts - client
+Route::post('/emprunter/{book}', [App\Http\Controllers\BorrowingController::class, 'emprunter'])->middleware('auth')->name('borrowings.emprunter');
+Route::get('/mes-emprunts', [App\Http\Controllers\BorrowingController::class, 'mesEmprunts'])->middleware('auth')->name('borrowings.mes-emprunts');
+
 require __DIR__.'/auth.php';

@@ -330,6 +330,18 @@
                                 @endif
                             </div>
 
+                            {{-- bouton emprunter — visible seulement pour le client --}}
+                            @if(Auth::user()->role == 'client')
+                                @if($book->available_copies > 0)
+                                    <form method="POST" action="{{ route('borrowings.emprunter', $book->id) }}" style="margin-top: 14px;">
+                                        @csrf
+                                        <button type="submit" style="background-color: #1a2332; color: #fff; border: none; border-radius: 7px; padding: 7px 16px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; cursor: pointer;">
+                                            Emprunter
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
+
                             {{-- boutons modifier / supprimer — visibles seulement pour l'admin au hover --}}
                             @if(Auth::user()->role == 'admin')
                                 <div class="card-actions">
