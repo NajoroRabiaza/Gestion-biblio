@@ -10,10 +10,7 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; }
 
-        .page-bg {
-            background-color: #f5f0eb;
-            min-height: 100vh;
-        }
+        .page-bg { background-color: #f5f0eb; min-height: 100vh; }
 
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -22,11 +19,7 @@
             letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            color: #6b7280;
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
+        .subtitle { color: #6b7280; font-size: 0.95rem; margin-top: 4px; }
 
         .stats-bar {
             background: #1a2332;
@@ -44,11 +37,7 @@
             font-weight: 700;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-top: 2px;
-        }
+        .stat-label { font-size: 0.8rem; color: #9ca3af; margin-top: 2px; }
 
         .emprunt-card {
             background: #fff;
@@ -59,16 +48,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: box-shadow 0.2s;
+            transition: box-shadow 0.2s, opacity 0.4s, transform 0.4s;
         }
 
-        .emprunt-card:hover {
-            box-shadow: 0 6px 20px rgba(26, 35, 50, 0.08);
-        }
+        .emprunt-card:hover { box-shadow: 0 6px 20px rgba(26, 35, 50, 0.08); }
 
         .emprunt-card.en-retard {
             border-left: 4px solid #ef4444;
             background-color: #fff8f8;
+        }
+
+        /* animation disparition */
+        .emprunt-card.suppression {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
         .book-title {
@@ -78,16 +72,8 @@
             font-weight: 600;
         }
 
-        .info-line {
-            color: #6b7280;
-            font-size: 0.85rem;
-            margin-top: 3px;
-        }
-
-        .info-line span {
-            color: #374151;
-            font-weight: 500;
-        }
+        .info-line { color: #6b7280; font-size: 0.85rem; margin-top: 3px; }
+        .info-line span { color: #374151; font-weight: 500; }
 
         .badge {
             display: inline-flex;
@@ -99,25 +85,12 @@
             border-radius: 20px;
         }
 
-        .badge-en-cours {
-            background-color: #eff6ff;
-            color: #1d4ed8;
-        }
+        .badge-en-cours  { background-color: #eff6ff; color: #1d4ed8; }
+        .badge-en-retard { background-color: #fef2f2; color: #991b1b; }
 
-        .badge-en-retard {
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
-
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .dot-blue  { background-color: #3b82f6; }
-        .dot-red   { background-color: #ef4444; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .dot-blue { background-color: #3b82f6; }
+        .dot-red  { background-color: #ef4444; }
 
         .btn-retour {
             background-color: #1a2332;
@@ -132,76 +105,80 @@
             white-space: nowrap;
         }
 
-        .btn-retour:hover {
-            background-color: #2c3e55;
-        }
+        .btn-retour:hover    { background-color: #2c3e55; }
+        .btn-retour:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .right-block {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
+        .right-block { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
 
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: #9ca3af;
-        }
+        .empty-state { text-align: center; padding: 80px 20px; color: #9ca3af; }
 
-        .flash-success {
-            background-color: #ecfdf5;
-            border: 1.5px solid #6ee7b7;
-            color: #065f46;
-            padding: 12px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .retard-label { font-size: 0.78rem; color: #991b1b; font-weight: 500; margin-top: 5px; }
+
+        /* toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 9999;
+            padding: 14px 20px;
+            border-radius: 10px;
             font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            max-width: 320px;
+            box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(-120%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .retard-label {
-            font-size: 0.78rem;
-            color: #991b1b;
-            font-weight: 500;
-        }
+        .toast.show { transform: translateX(0); }
+        .toast.hide { transform: translateX(-120%); transition: transform 0.3s ease-in; }
+        .toast-success { background-color: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; }
+        .toast-error   { background-color: #fef2f2; border: 1.5px solid #fca5a5; color: #991b1b; }
+        .toast-icon    { width: 18px; height: 18px; flex-shrink: 0; }
     </style>
+
+    {{-- toast --}}
+    <div id="toast" class="toast toast-success">
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="toast-icon">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message"></span>
+    </div>
 
     <div class="page-bg py-10 px-4">
         <div style="max-width: 960px; margin: 0 auto;">
-
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
-            @endif
 
             <div style="margin-bottom: 28px;">
                 <h1 class="section-title">Emprunts en cours</h1>
                 <p class="subtitle">Validez les retours de livres rendus par les clients</p>
             </div>
 
-            {{-- stats --}}
             <div class="stats-bar">
                 <div>
-                    <div class="stat-number">{{ $emprunts->count() }}</div>
+                    <div class="stat-number" id="stat-total">{{ $emprunts->count() }}</div>
                     <div class="stat-label">Emprunts actifs</div>
                 </div>
                 <div>
-                    <div class="stat-number">{{ $emprunts->where('status', 'en_retard')->count() }}</div>
+                    <div class="stat-number" id="stat-retard">{{ $emprunts->where('status', 'en_retard')->count() }}</div>
                     <div class="stat-label">En retard</div>
                 </div>
                 <div>
-                    <div class="stat-number">{{ $emprunts->where('status', 'en_cours')->count() }}</div>
+                    <div class="stat-number" id="stat-cours">{{ $emprunts->where('status', 'en_cours')->count() }}</div>
                     <div class="stat-label">Dans les délais</div>
                 </div>
             </div>
 
-            {{-- liste --}}
             @if($emprunts->isEmpty())
                 <div class="empty-state">
                     <p>Aucun emprunt en cours pour le moment.</p>
                 </div>
             @else
+                <div id="emprunts-list">
                 @foreach($emprunts as $emprunt)
-                    <div class="emprunt-card {{ $emprunt->status == 'en_retard' ? 'en-retard' : '' }}">
+                    <div class="emprunt-card {{ $emprunt->status == 'en_retard' ? 'en-retard' : '' }}" id="card-{{ $emprunt->id }}">
 
                         <div>
                             <div class="book-title">{{ $emprunt->book->title }}</div>
@@ -219,7 +196,7 @@
                             </div>
 
                             @if($emprunt->status == 'en_retard')
-                                <div class="retard-label" style="margin-top: 5px;">
+                                <div class="retard-label">
                                     En retard de {{ \Carbon\Carbon::parse($emprunt->due_date)->diffInDays(\Carbon\Carbon::today()) }} jour(s)
                                 </div>
                             @endif
@@ -228,30 +205,114 @@
                         <div class="right-block">
                             @if($emprunt->status == 'en_cours')
                                 <span class="badge badge-en-cours">
-                                    <span class="dot dot-blue"></span>
-                                    En cours
+                                    <span class="dot dot-blue"></span>En cours
                                 </span>
                             @else
                                 <span class="badge badge-en-retard">
-                                    <span class="dot dot-red"></span>
-                                    En retard
+                                    <span class="dot dot-red"></span>En retard
                                 </span>
                             @endif
 
-                            {{-- bouton valider le retour --}}
-                            <form method="POST" action="{{ route('admin.emprunts.retour', $emprunt->id) }}" onsubmit="return confirm('Valider le retour de ce livre ?')">
-                                @csrf
-                                <button type="submit" class="btn-retour">
-                                    Valider le retour
-                                </button>
-                            </form>
+                            <button
+                                class="btn-retour"
+                                data-id="{{ $emprunt->id }}"
+                                data-url="{{ route('admin.emprunts.retour', $emprunt->id) }}"
+                                data-status="{{ $emprunt->status }}"
+                                onclick="validerRetour(this)"
+                            >
+                                Valider le retour
+                            </button>
                         </div>
 
                     </div>
                 @endforeach
+                </div>
             @endif
 
         </div>
     </div>
+
+    <script>
+        let toastTimer = null;
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const msg   = document.getElementById('toast-message');
+            const icon  = document.getElementById('toast-icon');
+
+            msg.textContent = message;
+            toast.className = 'toast ' + (type === 'success' ? 'toast-success' : 'toast-error');
+
+            if (type === 'success') {
+                icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            } else {
+                icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            }
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toast.classList.remove('hide');
+            toast.classList.add('show');
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+            }, 3000);
+        }
+
+        function validerRetour(btn) {
+            if (!confirm('Valider le retour de ce livre ?')) return;
+
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            const url    = btn.getAttribute('data-url');
+            const id     = btn.getAttribute('data-id');
+            const status = btn.getAttribute('data-status');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                },
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+
+                    // animation de disparition de la carte
+                    const card = document.getElementById('card-' + id);
+                    card.classList.add('suppression');
+
+                    setTimeout(() => {
+                        card.remove();
+
+                        // mise à jour des stats
+                        const total  = document.getElementById('stat-total');
+                        const retard = document.getElementById('stat-retard');
+                        const cours  = document.getElementById('stat-cours');
+
+                        total.textContent = Math.max(0, parseInt(total.textContent) - 1);
+
+                        if (status === 'en_retard') {
+                            retard.textContent = Math.max(0, parseInt(retard.textContent) - 1);
+                        } else {
+                            cours.textContent = Math.max(0, parseInt(cours.textContent) - 1);
+                        }
+                    }, 380);
+                } else {
+                    showToast(data.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Valider le retour';
+                }
+            })
+            .catch(() => {
+                showToast('Une erreur est survenue.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Valider le retour';
+            });
+        }
+    </script>
 
 </x-app-layout>
