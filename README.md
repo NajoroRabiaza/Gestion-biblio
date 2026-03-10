@@ -89,7 +89,16 @@ Une fois le seeder lancé, vous pouvez vous connecter avec ces comptes :
 | Étape 6bis | Seeders (données de test) | ✅ Terminé |
 | Étape 8 | Affichage catalogue livres | ✅ Terminé |
 | Étape 9 | Mise en page et design | ✅ Terminé |
-| Étape 10 | Formulaire ajout livre (Admin) | ⏳ À faire |
+| Étape 10 | Formulaire ajout livre (Admin) | ✅ Terminé |
+| Étape 12 | Système d'Emprunt (Client) | ⏳ À faire |
+| Étape 13 | Mes Emprunts (Client) | ⏳ À faire |
+| Étape 14 | Gestion des Retours (Admin) | ⏳ À faire |
+| Étape 15 | Modifier et Supprimer un Livre (Admin) | ⏳ À faire |
+| Étape 16 | Gestion des Auteurs et Catégories (Admin) | ⏳ À faire |
+| Étape 17 | Tableau de Bord Admin (Statistiques) | ⏳ À faire |
+| Étape 18 | Gestion des Membres (Admin) | ⏳ À faire |
+| Étape 19 | Détection des Retards et Sanctions | ⏳ À faire |
+| Étape 20 | Tests finaux et Nettoyage du Code | ⏳ À faire |
 
 ---
 
