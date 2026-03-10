@@ -241,25 +241,78 @@
             background-color: #2c3e55;
         }
 
-        /* message flash */
-        .flash-success {
+        /* toast notification */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 9999;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            max-width: 320px;
+            box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(-120%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.hide {
+            transform: translateX(-120%);
+            transition: transform 0.3s ease-in;
+        }
+
+        .toast-success {
             background-color: #ecfdf5;
             border: 1.5px solid #6ee7b7;
             color: #065f46;
-            padding: 12px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+        }
+
+        .toast-error {
+            background-color: #fef2f2;
+            border: 1.5px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        .toast-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* bouton emprunter loading */
+        .btn-emprunter {
+            background-color: #1a2332;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 7px 16px;
+            font-size: 0.82rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            margin-top: 14px;
+        }
+
+        .btn-emprunter:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-emprunter.emprunte {
+            background-color: #6b7280;
         }
     </style>
 
     <div class="page-bg py-10 px-4">
         <div style="max-width: 1100px; margin: 0 auto;">
-
-            {{-- message flash --}}
-            @if(session('success'))
-                <div class="flash-success">{{ session('success') }}</div>
-            @endif
 
             {{-- bouton ajouter visible seulement pour l'admin --}}
             @if(Auth::user()->role == 'admin')
@@ -333,12 +386,14 @@
                             {{-- bouton emprunter — visible seulement pour le client --}}
                             @if(Auth::user()->role == 'client')
                                 @if($book->available_copies > 0)
-                                    <form method="POST" action="{{ route('borrowings.emprunter', $book->id) }}" style="margin-top: 14px;">
-                                        @csrf
-                                        <button type="submit" style="background-color: #1a2332; color: #fff; border: none; border-radius: 7px; padding: 7px 16px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; cursor: pointer;">
-                                            Emprunter
-                                        </button>
-                                    </form>
+                                    <button
+                                        class="btn-emprunter"
+                                        data-book-id="{{ $book->id }}"
+                                        data-url="{{ route('borrowings.emprunter', $book->id) }}"
+                                        onclick="emprunterLivre(this)"
+                                    >
+                                        Emprunter
+                                    </button>
                                 @endif
                             @endif
 
@@ -380,8 +435,99 @@
         </div>
     </div>
 
-    {{-- script pour la recherche de livre --}}
+    {{-- toast HTML --}}
+    <div id="toast" class="toast toast-success" role="alert">
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="toast-icon">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message"></span>
+    </div>
+
     <script>
+        // ---- toast ----
+        let toastTimer = null;
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-message');
+            const icon = document.getElementById('toast-icon');
+
+            // mettre le bon texte et la bonne couleur
+            msg.textContent = message;
+            toast.className = 'toast ' + (type === 'success' ? 'toast-success' : 'toast-error');
+
+            // changer l'icône selon le type
+            if (type === 'success') {
+                icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            } else {
+                icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            }
+
+            // annuler l'ancien timer si on clique vite
+            if (toastTimer) clearTimeout(toastTimer);
+
+            // faire entrer le toast
+            toast.classList.remove('hide');
+            toast.classList.add('show');
+
+            // après 3 secondes, faire sortir le toast
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+            }, 3000);
+        }
+
+        // ---- emprunter en AJAX ----
+        function emprunterLivre(btn) {
+            // je désactive le bouton pendant la requête pour éviter les doubles clics
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            const url = btn.getAttribute('data-url');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    // je change le bouton pour montrer que c'est emprunté
+                    btn.textContent = 'Emprunté';
+                    btn.classList.add('emprunte');
+                    btn.disabled = true;
+
+                    // je mets à jour le compteur de dispo sur la carte
+                    const card = btn.closest('.book-card');
+                    const dispoSpan = card.querySelector('.available-yes');
+                    if (dispoSpan) {
+                        const newCount = parseInt(dispoSpan.textContent) - 1;
+                        if (newCount <= 0) {
+                            dispoSpan.outerHTML = '<span class="available-no"><span class="dot dot-red"></span>Indisponible</span>';
+                        } else {
+                            dispoSpan.innerHTML = '<span class="dot dot-green"></span>' + newCount + ' dispo';
+                        }
+                    }
+                } else {
+                    showToast(data.message, 'error');
+                    // je réactive le bouton si erreur
+                    btn.disabled = false;
+                    btn.textContent = 'Emprunter';
+                }
+            })
+            .catch(() => {
+                showToast('Une erreur est survenue. Réessayez.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Emprunter';
+            });
+        }
+
+        // ---- recherche de livre ----
         function filterBooks() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.book-card');

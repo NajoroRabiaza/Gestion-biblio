@@ -18,27 +18,39 @@ class BorrowingController extends Controller
 
         // je vérifie que le livre est disponible
         if ($book->available_copies <= 0) {
-            return redirect()->route('books.index')->with('error', 'Ce livre n\'est plus disponible.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Ce livre n\'est plus disponible.',
+            ]);
         }
 
         // je vérifie que le client peut encore emprunter
         if ($user->current_borrowings >= $user->max_borrowings) {
-            return redirect()->route('books.index')->with('error', 'Vous avez atteint votre limite d\'emprunts (' . $user->max_borrowings . ' maximum).');
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous avez atteint votre limite d\'emprunts (' . $user->max_borrowings . ' maximum).',
+            ]);
         }
 
         // je vérifie que le client n'est pas bloqué
         if (!$user->can_borrow) {
-            return redirect()->route('books.index')->with('error', 'Votre compte ne peut pas effectuer d\'emprunts pour le moment.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Votre compte ne peut pas effectuer d\'emprunts pour le moment.',
+            ]);
         }
 
-        // je vérifie que le client n'a pas déjà emprunté ce même livre et pas encore rendu
-        $dejEmprunte = Borrowing::where('user_id', $user->id)
+        // je vérifie que le client n'a pas déjà emprunté ce même livre sans l'avoir rendu
+        $dejaEmprunte = Borrowing::where('user_id', $user->id)
             ->where('book_id', $book->id)
             ->where('status', 'en_cours')
             ->exists();
 
-        if ($dejEmprunte) {
-            return redirect()->route('books.index')->with('error', 'Vous avez déjà emprunté ce livre.');
+        if ($dejaEmprunte) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous avez déjà emprunté ce livre.',
+            ]);
         }
 
         // tout est bon, je crée l'emprunt
@@ -46,7 +58,7 @@ class BorrowingController extends Controller
             'user_id'     => $user->id,
             'book_id'     => $book->id,
             'borrow_date' => Carbon::today(),
-            'due_date'    => Carbon::today()->addDays(30), // retour prévu dans 30 jours
+            'due_date'    => Carbon::today()->addDays(30),
             'status'      => 'en_cours',
         ]);
 
@@ -56,7 +68,10 @@ class BorrowingController extends Controller
         // je mets à jour le compteur d'emprunts du client
         $user->increment('current_borrowings');
 
-        return redirect()->route('books.index')->with('success', 'Vous avez emprunté "' . $book->title . '". Retour prévu dans 30 jours.');
+        return response()->json([
+            'success' => true,
+            'message' => '"' . $book->title . '" emprunté avec succès. Retour prévu dans 30 jours.',
+        ]);
     }
 
     // le client voit ses emprunts
@@ -64,7 +79,6 @@ class BorrowingController extends Controller
     {
         $user = Auth::user();
 
-        // je récupère tous les emprunts du client connecté, avec le livre
         $emprunts = Borrowing::with('book.author')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
