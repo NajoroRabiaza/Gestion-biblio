@@ -33,17 +33,17 @@
         .btn-primary:hover { background-color: #2c3e55; }
 
         .btn-icon-delete {
-            background: transparent;
+            background: #1a2332;
             border: none;
             cursor: pointer;
-            padding: 6px;
+            padding: 7px;
             border-radius: 6px;
-            color: #d1c9be;
-            transition: color 0.2s, background 0.2s;
+            color: #fff;
+            transition: background 0.2s;
             display: flex;
             align-items: center;
         }
-        .btn-icon-delete:hover { color: #ef4444; background: #fef2f2; }
+        .btn-icon-delete:hover { background: #ef4444; }
         .btn-icon-delete:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .right-block { display: flex; align-items: center; gap: 16px; }
