@@ -37,11 +37,7 @@
             letter-spacing: -0.5px;
         }
 
-        .card-subtitle {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-top: 6px;
-        }
+        .card-subtitle { color: #9ca3af; font-size: 0.9rem; margin-top: 6px; }
 
         .form-group { margin-bottom: 20px; }
 
@@ -66,16 +62,34 @@
             transition: border-color 0.2s, background 0.2s;
         }
 
-        .form-input:focus {
-            border-color: #1a2332;
-            background: #fff;
+        .form-input:focus { border-color: #1a2332; background: #fff; }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        .error-msg {
-            color: #c81e1e;
-            font-size: 0.82rem;
-            margin-top: 5px;
+        .input-wrapper .form-input {
+            padding-right: 44px;
         }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover { color: #1a2332; }
+
+        .error-msg { color: #c81e1e; font-size: 0.82rem; margin-top: 5px; }
 
         .form-error-block {
             background-color: #fef2f2;
@@ -144,10 +158,7 @@
             transition: border-color 0.2s, background 0.2s;
         }
 
-        .btn-login:hover {
-            border-color: #1a2332;
-            background-color: #f5f0eb;
-        }
+        .btn-login:hover { border-color: #1a2332; background-color: #f5f0eb; }
     </style>
 </head>
 <body>
@@ -200,25 +211,41 @@
 
             <div class="form-group">
                 <label class="form-label" for="password">Mot de passe</label>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    class="form-input"
-                    autocomplete="new-password"
-                >
+                <div class="input-wrapper">
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        class="form-input"
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="toggle-password" onclick="toggleVisibility('password', this)" tabindex="-1">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
                 @error('password') <p class="error-msg">{{ $message }}</p> @enderror
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="password_confirmation">Confirmer le mot de passe</label>
-                <input
-                    id="password_confirmation"
-                    type="password"
-                    name="password_confirmation"
-                    class="form-input"
-                    autocomplete="new-password"
-                >
+                <div class="input-wrapper">
+                    <input
+                        id="password_confirmation"
+                        type="password"
+                        name="password_confirmation"
+                        class="form-input"
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="toggle-password" onclick="toggleVisibility('password_confirmation', this)" tabindex="-1">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <button type="submit" class="btn-submit">Créer mon compte</button>
@@ -228,6 +255,29 @@
             <a href="{{ route('login') }}" class="btn-login">Se connecter</a>
         </form>
     </div>
+
+    <script>
+        function toggleVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon  = btn.querySelector('svg');
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+
+            if (isHidden) {
+                icon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                `;
+            } else {
+                icon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                `;
+            }
+        }
+    </script>
 
 </body>
 </html>
