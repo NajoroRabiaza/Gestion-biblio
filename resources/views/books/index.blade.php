@@ -238,7 +238,7 @@
         }
 
         .btn-delete:hover {
-            background-color: #2c3e55;
+            background-color: #ef4444;
         }
 
         /* toast notification */
@@ -256,7 +256,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transform: translateX(-120%);
+            transform: translateX(calc(-100% - 24px));
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -265,7 +265,7 @@
         }
 
         .toast.hide {
-            transform: translateX(-120%);
+            transform: translateX(calc(-100% - 24px));
             transition: transform 0.3s ease-in;
         }
 
@@ -452,25 +452,20 @@
             const msg = document.getElementById('toast-message');
             const icon = document.getElementById('toast-icon');
 
-            // mettre le bon texte et la bonne couleur
             msg.textContent = message;
             toast.className = 'toast ' + (type === 'success' ? 'toast-success' : 'toast-error');
 
-            // changer l'icône selon le type
             if (type === 'success') {
                 icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
             } else {
                 icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
             }
 
-            // annuler l'ancien timer si on clique vite
             if (toastTimer) clearTimeout(toastTimer);
 
-            // faire entrer le toast
             toast.classList.remove('hide');
             toast.classList.add('show');
 
-            // après 3 secondes, faire sortir le toast
             toastTimer = setTimeout(() => {
                 toast.classList.remove('show');
                 toast.classList.add('hide');
@@ -479,7 +474,6 @@
 
         // ---- emprunter en AJAX ----
         function emprunterLivre(btn) {
-            // je désactive le bouton pendant la requête pour éviter les doubles clics
             btn.disabled = true;
             btn.textContent = '...';
 
@@ -497,12 +491,10 @@
             .then(data => {
                 if (data.success) {
                     showToast(data.message, 'success');
-                    // je change le bouton pour montrer que c'est emprunté
                     btn.textContent = 'Emprunté';
                     btn.classList.add('emprunte');
                     btn.disabled = true;
 
-                    // je mets à jour le compteur de dispo sur la carte
                     const card = btn.closest('.book-card');
                     const dispoSpan = card.querySelector('.available-yes');
                     if (dispoSpan) {
@@ -515,7 +507,6 @@
                     }
                 } else {
                     showToast(data.message, 'error');
-                    // je réactive le bouton si erreur
                     btn.disabled = false;
                     btn.textContent = 'Emprunter';
                 }
