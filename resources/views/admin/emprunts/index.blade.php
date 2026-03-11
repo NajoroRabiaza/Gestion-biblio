@@ -260,58 +260,58 @@
         }
 
         function validerRetour(btn) {
-            if (!confirm('Valider le retour de ce livre ?')) return;
+            demanderConfirmation('Valider le retour de ce livre ?', 'Valider', function() {
 
-            btn.disabled = true;
-            btn.textContent = '...';
+                btn.disabled = true;
+                btn.textContent = '...';
 
-            const url    = btn.getAttribute('data-url');
-            const id     = btn.getAttribute('data-id');
-            const status = btn.getAttribute('data-status');
+                const url    = btn.getAttribute('data-url');
+                const id     = btn.getAttribute('data-id');
+                const status = btn.getAttribute('data-status');
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                },
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
 
-                    // animation de disparition de la carte
-                    const card = document.getElementById('card-' + id);
-                    card.classList.add('suppression');
+                        const card = document.getElementById('card-' + id);
+                        card.classList.add('suppression');
 
-                    setTimeout(() => {
-                        card.remove();
+                        setTimeout(() => {
+                            card.remove();
 
-                        // mise à jour des stats
-                        const total  = document.getElementById('stat-total');
-                        const retard = document.getElementById('stat-retard');
-                        const cours  = document.getElementById('stat-cours');
+                            const total  = document.getElementById('stat-total');
+                            const retard = document.getElementById('stat-retard');
+                            const cours  = document.getElementById('stat-cours');
 
-                        total.textContent = Math.max(0, parseInt(total.textContent) - 1);
+                            total.textContent = Math.max(0, parseInt(total.textContent) - 1);
 
-                        if (status === 'en_retard') {
-                            retard.textContent = Math.max(0, parseInt(retard.textContent) - 1);
-                        } else {
-                            cours.textContent = Math.max(0, parseInt(cours.textContent) - 1);
-                        }
-                    }, 380);
-                } else {
-                    showToast(data.message, 'error');
+                            if (status === 'en_retard') {
+                                retard.textContent = Math.max(0, parseInt(retard.textContent) - 1);
+                            } else {
+                                cours.textContent = Math.max(0, parseInt(cours.textContent) - 1);
+                            }
+                        }, 380);
+                    } else {
+                        showToast(data.message, 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Valider le retour';
+                    }
+                })
+                .catch(() => {
+                    showToast('Une erreur est survenue.', 'error');
                     btn.disabled = false;
                     btn.textContent = 'Valider le retour';
-                }
-            })
-            .catch(() => {
-                showToast('Une erreur est survenue.', 'error');
-                btn.disabled = false;
-                btn.textContent = 'Valider le retour';
-            });
+                });
+
+            }); // fin demanderConfirmation
         }
     </script>
 

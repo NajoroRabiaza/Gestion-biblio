@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
-    // les colonnes a remplir
     protected $fillable = [
-        'isbn',
         'title',
+        'isbn',
         'author_id',
         'category_id',
         'publisher',
@@ -27,19 +26,16 @@ class Book extends Model
         'is_active',
     ];
 
-    // un livre appartient à un auteur
     public function author()
     {
         return $this->belongsTo(Author::class);
     }
 
-    // un livre appartient à une categorie
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    // un livre peut avoir plusieurs emprunts
     public function borrowings()
     {
         return $this->hasMany(Borrowing::class);

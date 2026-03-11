@@ -22,16 +22,18 @@ class Borrowing extends Model
         'notes',
     ];
 
-    // l'emprunt appartient à un user(le client)
+    // l'emprunt appartient à un user (le client)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
     // l'emprunt concerne un livre
+    // withTrashed() permet de récupérer aussi les livres supprimés (soft delete)
+    // sinon si le livre est supprimé, $emprunt->book retourne null et ça plante
     public function book()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class)->withTrashed();
     }
 
     // l'emprunt peut avoir une sanction

@@ -10,23 +10,10 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; }
 
-        .page-bg {
-            background-color: #f5f0eb;
-            min-height: 100vh;
-        }
+        .page-bg { background-color: #f5f0eb; min-height: 100vh; }
 
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #1a2332;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #1a2332; letter-spacing: -0.5px; }
+        .subtitle { color: #6b7280; font-size: 0.95rem; margin-top: 4px; }
 
         .search-bar {
             background: #fff;
@@ -39,135 +26,31 @@
             transition: border 0.2s;
             font-family: 'DM Sans', sans-serif;
         }
-
-        .search-bar:focus {
-            border-color: #1a2332;
-        }
+        .search-bar:focus { border-color: #1a2332; }
 
         .book-card {
             background: #ffffff;
             border-radius: 12px;
             padding: 24px;
             border: 1.5px solid #e5ddd4;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.35s;
             position: relative;
             overflow: hidden;
+            animation: fadeUp 0.4s ease both;
         }
 
-        .book-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(26, 35, 50, 0.1);
-        }
+        .book-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26, 35, 50, 0.1); }
 
         .book-card::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
+            left: 0; top: 0; bottom: 0;
             width: 4px;
             background-color: #1a2332;
             border-radius: 12px 0 0 12px;
         }
 
-        .book-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            color: #1a2332;
-            font-weight: 600;
-            line-height: 1.3;
-        }
-
-        .book-author {
-            color: #6b7280;
-            font-size: 0.88rem;
-            margin-top: 4px;
-        }
-
-        .badge-category {
-            display: inline-block;
-            background-color: #f0ebe4;
-            color: #7c6a55;
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-top: 12px;
-        }
-
-        .available-yes {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #ecfdf5;
-            color: #065f46;
-            font-size: 0.78rem;
-            font-weight: 500;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-left: 6px;
-        }
-
-        .available-no {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #fef2f2;
-            color: #991b1b;
-            font-size: 0.78rem;
-            font-weight: 500;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-left: 6px;
-        }
-
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .dot-green { background-color: #10b981; }
-        .dot-red { background-color: #ef4444; }
-
-        .stats-bar {
-            background: #1a2332;
-            color: #fff;
-            border-radius: 12px;
-            padding: 20px 28px;
-            display: flex;
-            gap: 40px;
-            margin-bottom: 32px;
-        }
-
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-top: 2px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #9ca3af;
-        }
-
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .book-card {
-            animation: fadeUp 0.4s ease both;
-        }
+        .book-card.suppression { opacity: 0; transform: translateY(-10px); }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(16px); }
@@ -181,12 +64,29 @@
         .book-card:nth-child(5) { animation-delay: 0.25s; }
         .book-card:nth-child(6) { animation-delay: 0.30s; }
 
-        /* --- boutons modifier / supprimer --- */
+        .book-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #1a2332; font-weight: 600; line-height: 1.3; }
+        .book-author { color: #6b7280; font-size: 0.88rem; margin-top: 4px; }
+
+        .badge-category { display: inline-block; background-color: #f0ebe4; color: #7c6a55; font-size: 0.75rem; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-top: 12px; }
+
+        .available-yes { display: inline-flex; align-items: center; gap: 5px; background-color: #ecfdf5; color: #065f46; font-size: 0.78rem; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-left: 6px; }
+        .available-no  { display: inline-flex; align-items: center; gap: 5px; background-color: #fef2f2; color: #991b1b; font-size: 0.78rem; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-left: 6px; }
+
+        .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .dot-green { background-color: #10b981; }
+        .dot-red   { background-color: #ef4444; }
+
+        .stats-bar { background: #1a2332; color: #fff; border-radius: 12px; padding: 20px 28px; display: flex; gap: 40px; margin-bottom: 32px; }
+        .stat-number { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; }
+        .stat-label  { font-size: 0.8rem; color: #9ca3af; margin-top: 2px; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
+        .books-grid  { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        /* boutons hover admin */
         .card-actions {
             position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; right: 0; bottom: 0;
             width: 52px;
             display: flex;
             flex-direction: column;
@@ -201,14 +101,10 @@
             padding-right: 10px;
         }
 
-        .book-card:hover .card-actions {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .book-card:hover .card-actions { opacity: 1; transform: translateX(0); }
 
         .action-btn {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
@@ -219,126 +115,160 @@
             text-decoration: none;
         }
 
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
+        .action-btn:hover { transform: scale(1.1); }
+        .btn-edit   { background-color: #1a2332; color: #fff; }
+        .btn-edit:hover { background-color: #2c3e55; }
+        .btn-delete { background-color: #1a2332; color: #fff; }
+        .btn-delete:hover { background-color: #ef4444; }
 
-        .btn-edit {
-            background-color: #1a2332;
-            color: #ffffff;
-        }
-
-        .btn-edit:hover {
-            background-color: #2c3e55;
-        }
-
-        .btn-delete {
-            background-color: #1a2332;
-            color: #ffffff;
-        }
-
-        .btn-delete:hover {
-            background-color: #ef4444;
-        }
-
-        /* toast notification */
+        /* toast */
         .toast {
             position: fixed;
-            top: 24px;
-            left: 24px;
+            top: 24px; left: 24px;
             z-index: 9999;
             padding: 14px 20px;
             border-radius: 10px;
             font-size: 0.9rem;
             font-family: 'DM Sans', sans-serif;
             max-width: 320px;
-            box-shadow: 0 8px 24px rgba(26, 35, 50, 0.15);
+            box-shadow: 0 8px 24px rgba(26,35,50,0.15);
             display: flex;
             align-items: center;
             gap: 10px;
             transform: translateX(calc(-100% - 24px));
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        .toast.show { transform: translateX(0); }
+        .toast.hide { transform: translateX(calc(-100% - 24px)); transition: transform 0.3s ease-in; }
+        .toast-success { background-color: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; }
+        .toast-error   { background-color: #fef2f2; border: 1.5px solid #fca5a5; color: #991b1b; }
+        .toast-icon    { width: 18px; height: 18px; flex-shrink: 0; }
 
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.hide {
-            transform: translateX(calc(-100% - 24px));
-            transition: transform 0.3s ease-in;
-        }
-
-        .toast-success {
-            background-color: #ecfdf5;
-            border: 1.5px solid #6ee7b7;
-            color: #065f46;
-        }
-
-        .toast-error {
-            background-color: #fef2f2;
-            border: 1.5px solid #fca5a5;
-            color: #991b1b;
-        }
-
-        .toast-icon {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-
-        /* bouton emprunter loading */
+        /* bouton emprunter */
         .btn-emprunter {
-            background-color: #1a2332;
-            color: #fff;
-            border: none;
-            border-radius: 7px;
-            padding: 7px 16px;
-            font-size: 0.82rem;
+            background-color: #1a2332; color: #fff;
+            border: none; border-radius: 7px;
+            padding: 7px 16px; font-size: 0.82rem;
             font-family: 'DM Sans', sans-serif;
             cursor: pointer;
             transition: background 0.2s, opacity 0.2s;
             margin-top: 14px;
         }
+        .btn-emprunter:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-emprunter.emprunte { background-color: #6b7280; }
 
-        .btn-emprunter:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        /* modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 35, 50, 0.45);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            border: 1.5px solid #e5ddd4;
+            padding: 36px 40px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(26,35,50,0.18);
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
+
+        .modal-icon {
+            width: 48px; height: 48px;
+            background-color: #fef2f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            color: #ef4444;
         }
 
-        .btn-emprunter.emprunte {
-            background-color: #6b7280;
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: #1a2332;
+            margin-bottom: 10px;
         }
+
+        .modal-message {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .modal-message strong { color: #1a2332; }
+
+        .modal-btn-close {
+            background-color: #1a2332;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-btn-close:hover { background-color: #2c3e55; }
     </style>
+
+    {{-- toast --}}
+    <div id="toast" class="toast toast-success" role="alert">
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="toast-icon">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message"></span>
+    </div>
+
+    {{-- modal bloqué --}}
+    <div id="modal-overlay" class="modal-overlay" onclick="fermerModal(event)">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+            </div>
+            <div class="modal-title">Suppression impossible</div>
+            <p class="modal-message" id="modal-message"></p>
+            <button class="modal-btn-close" onclick="fermerModal()">Fermer</button>
+        </div>
+    </div>
 
     <div class="page-bg py-10 px-4">
         <div style="max-width: 1100px; margin: 0 auto;">
 
-            {{-- bouton ajouter visible seulement pour l'admin --}}
             @if(Auth::user()->role == 'admin')
                 <div style="text-align: right; margin-bottom: 16px;">
                     <a href="{{ route('books.create') }}" style="background-color: #1a2332; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
-                        ajouter un livre
+                        Ajouter un livre
                     </a>
                 </div>
             @endif
 
-            {{-- titre + recherche --}}
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px;">
                 <div>
                     <h1 class="section-title">Catalogue</h1>
                     <p class="subtitle">Tous les livres disponibles dans la bibliothèque</p>
                 </div>
-                <input
-                    type="text"
-                    class="search-bar"
-                    id="searchInput"
-                    placeholder="Rechercher un livre..."
-                    onkeyup="filterBooks()"
-                >
+                <input type="text" class="search-bar" id="searchInput" placeholder="Rechercher un livre..." onkeyup="filterBooks()">
             </div>
 
-            {{-- barre de stats --}}
             <div class="stats-bar">
                 <div>
                     <div class="stat-number">{{ $books->count() }}</div>
@@ -354,15 +284,12 @@
                 </div>
             </div>
 
-            {{-- liste des livres --}}
             @if($books->isEmpty())
-                <div class="empty-state">
-                    <p>Aucun livre disponible pour le moment</p>
-                </div>
+                <div class="empty-state"><p>Aucun livre disponible pour le moment</p></div>
             @else
                 <div class="books-grid" id="booksGrid">
                     @foreach($books as $book)
-                        <div class="book-card" data-title="{{ strtolower($book->title) }}" data-author="{{ strtolower($book->author->name) }}">
+                        <div class="book-card" id="card-{{ $book->id }}" data-title="{{ strtolower($book->title) }}" data-author="{{ strtolower($book->author->name) }}">
 
                             <div class="book-title">{{ $book->title }}</div>
                             <div class="book-author">par {{ $book->author->name }}</div>
@@ -372,18 +299,15 @@
 
                                 @if($book->available_copies > 0)
                                     <span class="available-yes">
-                                        <span class="dot dot-green"></span>
-                                        {{ $book->available_copies }} dispo
+                                        <span class="dot dot-green"></span>{{ $book->available_copies }} dispo
                                     </span>
                                 @else
                                     <span class="available-no">
-                                        <span class="dot dot-red"></span>
-                                        Indisponible
+                                        <span class="dot dot-red"></span>Indisponible
                                     </span>
                                 @endif
                             </div>
 
-                            {{-- bouton emprunter — visible seulement pour le client --}}
                             @if(Auth::user()->role == 'client')
                                 @if($book->available_copies > 0)
                                     <button
@@ -397,33 +321,28 @@
                                 @endif
                             @endif
 
-                            {{-- boutons modifier / supprimer — visibles seulement pour l'admin au hover --}}
                             @if(Auth::user()->role == 'admin')
                                 <div class="card-actions">
-
-                                    {{-- bouton modifier (icone crayon) --}}
                                     <a href="{{ route('books.edit', $book->id) }}" class="action-btn btn-edit" title="Modifier">
                                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                         </svg>
                                     </a>
-
-                                    {{-- bouton supprimer (icone corbeille) --}}
-                                    <form method="POST" action="{{ route('books.destroy', $book->id) }}" onsubmit="return confirm('Supprimer ce livre ?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-btn btn-delete" title="Supprimer">
-                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6"/>
-                                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                                                <path d="M10 11v6"/>
-                                                <path d="M14 11v6"/>
-                                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-
+                                    <button
+                                        class="action-btn btn-delete"
+                                        title="Supprimer"
+                                        data-id="{{ $book->id }}"
+                                        data-url="{{ route('books.destroy', $book->id) }}"
+                                        onclick="supprimerLivre(this)"
+                                    >
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                            <path d="M10 11v6"/><path d="M14 11v6"/>
+                                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             @endif
 
@@ -435,34 +354,22 @@
         </div>
     </div>
 
-    {{-- toast HTML --}}
-    <div id="toast" class="toast toast-success" role="alert">
-        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="toast-icon">
-            <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        <span id="toast-message"></span>
-    </div>
-
     <script>
-        // ---- toast ----
         let toastTimer = null;
 
         function showToast(message, type) {
             const toast = document.getElementById('toast');
-            const msg = document.getElementById('toast-message');
-            const icon = document.getElementById('toast-icon');
+            const msg   = document.getElementById('toast-message');
+            const icon  = document.getElementById('toast-icon');
 
             msg.textContent = message;
             toast.className = 'toast ' + (type === 'success' ? 'toast-success' : 'toast-error');
 
-            if (type === 'success') {
-                icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-            } else {
-                icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
-            }
+            icon.innerHTML = type === 'success'
+                ? '<polyline points="20 6 9 17 4 12"/>'
+                : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
 
             if (toastTimer) clearTimeout(toastTimer);
-
             toast.classList.remove('hide');
             toast.classList.add('show');
 
@@ -472,7 +379,56 @@
             }, 3000);
         }
 
-        // ---- emprunter en AJAX ----
+        function ouvrirModal(message) {
+            document.getElementById('modal-message').innerHTML = message;
+            document.getElementById('modal-overlay').classList.add('show');
+        }
+
+        function fermerModal(event) {
+            // si on clique sur l'overlay (fond) ou sur le bouton fermer
+            if (!event || event.target === document.getElementById('modal-overlay')) {
+                document.getElementById('modal-overlay').classList.remove('show');
+            }
+        }
+
+        function supprimerLivre(btn) {
+            demanderConfirmation('Supprimer ce livre ?', 'Supprimer', function() {
+
+                btn.disabled = true;
+                const id  = btn.getAttribute('data-id');
+                const url = btn.getAttribute('data-url');
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
+
+                        const card = document.getElementById('card-' + id);
+                        card.classList.add('suppression');
+                        setTimeout(() => card.remove(), 380);
+                    } else if (data.bloque) {
+                        ouvrirModal(data.message);
+                        btn.disabled = false;
+                    } else {
+                        showToast(data.message, 'error');
+                        btn.disabled = false;
+                    }
+                })
+                .catch(() => {
+                    showToast('Une erreur est survenue.', 'error');
+                    btn.disabled = false;
+                });
+
+            }); // fin demanderConfirmation
+        }
+
         function emprunterLivre(btn) {
             btn.disabled = true;
             btn.textContent = '...';
@@ -518,19 +474,12 @@
             });
         }
 
-        // ---- recherche de livre ----
         function filterBooks() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.book-card');
-
-            cards.forEach(card => {
-                const title = card.getAttribute('data-title');
+            document.querySelectorAll('.book-card').forEach(card => {
+                const title  = card.getAttribute('data-title');
                 const author = card.getAttribute('data-author');
-                if (title.includes(input) || author.includes(input)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (title.includes(input) || author.includes(input)) ? 'block' : 'none';
             });
         }
     </script>

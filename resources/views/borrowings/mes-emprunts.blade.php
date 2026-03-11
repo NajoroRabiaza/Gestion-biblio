@@ -263,50 +263,50 @@
         }
 
         function annulerEmprunt(btn) {
-            if (!confirm('Annuler cet emprunt ?')) return;
+            demanderConfirmation('Voulez-vous annuler cet emprunt ?', 'Annuler l\'emprunt', function() {
 
-            btn.disabled = true;
-            btn.textContent = '...';
+                btn.disabled = true;
+                btn.textContent = '...';
 
-            const url = btn.getAttribute('data-url');
-            const id  = btn.getAttribute('data-id');
+                const url = btn.getAttribute('data-url');
+                const id  = btn.getAttribute('data-id');
 
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                },
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
 
-                    // je fais disparaître la carte avec une animation
-                    const card = document.getElementById('card-' + id);
-                    card.classList.add('suppression');
+                        const card = document.getElementById('card-' + id);
+                        card.classList.add('suppression');
 
-                    setTimeout(() => {
-                        card.remove();
+                        setTimeout(() => {
+                            card.remove();
 
-                        // je mets à jour les stats
-                        const total    = document.getElementById('stat-total');
-                        const enCours  = document.getElementById('stat-en-cours');
-                        total.textContent   = Math.max(0, parseInt(total.textContent) - 1);
-                        enCours.textContent = Math.max(0, parseInt(enCours.textContent) - 1);
-                    }, 380);
-                } else {
-                    showToast(data.message, 'error');
+                            const total   = document.getElementById('stat-total');
+                            const enCours = document.getElementById('stat-en-cours');
+                            total.textContent   = Math.max(0, parseInt(total.textContent) - 1);
+                            enCours.textContent = Math.max(0, parseInt(enCours.textContent) - 1);
+                        }, 380);
+                    } else {
+                        showToast(data.message, 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Annuler';
+                    }
+                })
+                .catch(() => {
+                    showToast('Une erreur est survenue.', 'error');
                     btn.disabled = false;
                     btn.textContent = 'Annuler';
-                }
-            })
-            .catch(() => {
-                showToast('Une erreur est survenue.', 'error');
-                btn.disabled = false;
-                btn.textContent = 'Annuler';
-            });
+                });
+
+            }); // fin demanderConfirmation
         }
     </script>
 

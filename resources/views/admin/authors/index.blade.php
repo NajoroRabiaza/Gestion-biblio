@@ -163,41 +163,42 @@
         }
 
         function supprimerAuteur(btn) {
-            if (!confirm('Supprimer cet auteur ?')) return;
+            demanderConfirmation('Supprimer cet auteur ?', 'Supprimer', function() {
 
-            btn.disabled = true;
-            const id  = btn.getAttribute('data-id');
-            const url = btn.getAttribute('data-url');
+                btn.disabled = true;
+                const id  = btn.getAttribute('data-id');
+                const url = btn.getAttribute('data-url');
 
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                },
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
 
-                    const card = document.getElementById('card-' + id);
-                    card.classList.add('suppression');
-                    setTimeout(() => {
-                        card.remove();
-                        // mettre à jour le sous-titre
-                        const remaining = document.querySelectorAll('[id^="card-"]').length;
-                        document.getElementById('subtitle').textContent = remaining + ' auteur(s) enregistré(s)';
-                    }, 380);
-                } else {
-                    showToast(data.message, 'error');
+                        const card = document.getElementById('card-' + id);
+                        card.classList.add('suppression');
+                        setTimeout(() => {
+                            card.remove();
+                            const remaining = document.querySelectorAll('[id^="card-"]').length;
+                            document.getElementById('subtitle').textContent = remaining + ' auteur(s) enregistré(s)';
+                        }, 380);
+                    } else {
+                        showToast(data.message, 'error');
+                        btn.disabled = false;
+                    }
+                })
+                .catch(() => {
+                    showToast('Une erreur est survenue.', 'error');
                     btn.disabled = false;
-                }
-            })
-            .catch(() => {
-                showToast('Une erreur est survenue.', 'error');
-                btn.disabled = false;
-            });
+                });
+
+            }); // fin demanderConfirmation
         }
     </script>
 
