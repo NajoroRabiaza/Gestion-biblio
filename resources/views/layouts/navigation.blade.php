@@ -9,23 +9,24 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
 
-                    {{-- j'ajoute le lien vers le catalogue de livres --}}
+                    {{-- dashboard visible seulement pour l'admin --}}
+                    @if(Auth::user()->role == 'admin')
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    @endif
+
                     <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                         {{ __('Livres') }}
                     </x-nav-link>
 
-                    {{-- lien Mes Emprunts visible seulement pour le client --}}
                     @if(Auth::user()->role == 'client')
                         <x-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
                             {{ __('Mes Emprunts') }}
                         </x-nav-link>
                     @endif
 
-                    {{-- liens admin --}}
                     @if(Auth::user()->role == 'admin')
                         <x-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                             {{ __('Retours') }}
@@ -81,23 +82,24 @@
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
 
-            {{-- lien livres pour mobile aussi --}}
+            {{-- dashboard visible seulement pour l'admin (mobile) --}}
+            @if(Auth::user()->role == 'admin')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+            @endif
+
             <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                 {{ __('Livres') }}
             </x-responsive-nav-link>
 
-            {{-- lien Mes Emprunts pour mobile --}}
             @if(Auth::user()->role == 'client')
                 <x-responsive-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
                     {{ __('Mes Emprunts') }}
                 </x-responsive-nav-link>
             @endif
 
-            {{-- liens admin mobile --}}
             @if(Auth::user()->role == 'admin')
                 <x-responsive-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                     {{ __('Retours') }}
