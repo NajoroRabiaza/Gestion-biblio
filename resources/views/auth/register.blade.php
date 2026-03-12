@@ -3,50 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte — Bibliothèque</title>
+    <title>Créer un compte — Biblio</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #f5f0eb;
+            background-color: #ede8e0;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5ddd4;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: #1a2332;
+            text-decoration: none;
+        }
+
+        .logo span { color: #c0844a; }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-text { font-size: 0.88rem; color: #6b7280; }
+
+        .btn-login-top {
+            background-color: #1a2332;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 0.88rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-login-top:hover { background-color: #2c3e55; }
+
+        /* ── Main ── */
+        .main {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 40px 24px;
         }
 
         .card {
             background: #fff;
-            border-radius: 16px;
-            border: 1.5px solid #e5ddd4;
-            padding: 48px 44px;
+            border-radius: 20px;
+            border: 1px solid #e5ddd4;
+            box-shadow: 0 8px 40px rgba(26,35,50,0.08);
+            display: flex;
             width: 100%;
-            max-width: 440px;
-            box-shadow: 0 8px 40px rgba(26, 35, 50, 0.07);
+            max-width: 900px;
+            overflow: hidden;
         }
 
-        .card-header { margin-bottom: 36px; }
+        /* ── Gauche : illustration ── */
+        .image-side {
+            width: 360px;
+            background: #1a2332;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            flex-shrink: 0;
+        }
 
-        .card-title {
+        .image-side img {
+            width: 100%;
+            max-width: 280px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35));
+        }
+
+        /* ── Droite : formulaire ── */
+        .form-side {
+            flex: 1;
+            padding: 44px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-title {
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
             color: #1a2332;
             letter-spacing: -0.5px;
+            margin-bottom: 24px;
         }
 
-        .card-subtitle { color: #9ca3af; font-size: 0.9rem; margin-top: 6px; }
-
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
 
         .form-label {
             display: block;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: #374151;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
         }
 
         .form-input {
@@ -54,7 +129,7 @@
             border: 1.5px solid #d1c9be;
             border-radius: 9px;
             padding: 11px 14px;
-            font-size: 0.95rem;
+            font-size: 0.93rem;
             font-family: 'DM Sans', sans-serif;
             color: #1a2332;
             background: #faf8f5;
@@ -70,9 +145,7 @@
             align-items: center;
         }
 
-        .input-wrapper .form-input {
-            padding-right: 44px;
-        }
+        .input-wrapper .form-input { padding-right: 44px; }
 
         .toggle-password {
             position: absolute;
@@ -89,20 +162,26 @@
 
         .toggle-password:hover { color: #1a2332; }
 
-        .error-msg { color: #c81e1e; font-size: 0.82rem; margin-top: 5px; }
+        .error-msg { color: #c81e1e; font-size: 0.81rem; margin-top: 4px; }
 
         .form-error-block {
             background-color: #fef2f2;
             border: 1.5px solid #fca5a5;
             color: #991b1b;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.88rem;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
         }
 
         .form-error-block ul { padding-left: 16px; }
         .form-error-block li { margin-top: 3px; }
+
+        .row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
 
         .btn-submit {
             width: 100%;
@@ -121,149 +200,117 @@
 
         .btn-submit:hover { background-color: #2c3e55; }
 
-        .divider {
-            text-align: center;
-            color: #d1c9be;
-            font-size: 0.82rem;
-            margin: 20px 0;
-            position: relative;
+        @media (max-width: 700px) {
+            .image-side { display: none; }
+            .form-side { padding: 36px 28px; }
+            .topbar { padding: 14px 20px; }
+            .row-2col { grid-template-columns: 1fr; }
         }
-
-        .divider::before, .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: #e5ddd4;
-        }
-
-        .divider::before { left: 0; }
-        .divider::after  { right: 0; }
-
-        .btn-login {
-            width: 100%;
-            background-color: transparent;
-            color: #1a2332;
-            border: 1.5px solid #d1c9be;
-            border-radius: 9px;
-            padding: 12px;
-            font-size: 0.95rem;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .btn-login:hover { border-color: #1a2332; background-color: #f5f0eb; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">Créer un compte</h1>
-            <p class="card-subtitle">Rejoignez la bibliothèque en tant que membre</p>
+    <header class="topbar">
+        <a href="/" class="logo">Gestion <span>Biblio</span></a>
+        <div class="topbar-right">
+            <span class="topbar-text">Déjà un compte ?</span>
+            <a href="{{ route('login') }}" class="btn-login-top">Se connecter</a>
         </div>
+    </header>
 
-        @if ($errors->any())
-            <div class="form-error-block">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <main class="main">
+        <div class="card">
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-
-            <div class="form-group">
-                <label class="form-label" for="name">Nom complet</label>
-                <input
-                    id="name"
-                    type="text"
-                    name="name"
-                    class="form-input"
-                    value="{{ old('name') }}"
-                    autocomplete="name"
-                    autofocus
-                >
-                @error('name') <p class="error-msg">{{ $message }}</p> @enderror
+            <!-- Gauche : illustration -->
+            <div class="image-side">
+                <img src="{{ asset('images/image_register.png') }}" alt="Bibliothèque illustrée">
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="email">Adresse email</label>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    class="form-input"
-                    value="{{ old('email') }}"
-                    autocomplete="email"
-                >
-                @error('email') <p class="error-msg">{{ $message }}</p> @enderror
+            <!-- Droite : formulaire -->
+            <div class="form-side">
+                <h1 class="page-title">Créer un compte</h1>
+
+                @if ($errors->any())
+                    <div class="form-error-block">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+
+                    <div class="form-group">
+                        <label class="form-label" for="name">Nom complet</label>
+                        <input id="name" type="text" name="name" class="form-input"
+                            placeholder="Votre nom et prénom"
+                            value="{{ old('name') }}" autocomplete="name" autofocus>
+                        @error('name') <p class="error-msg">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Adresse email</label>
+                        <input id="email" type="email" name="email" class="form-input"
+                            placeholder="Votre adresse email"
+                            value="{{ old('email') }}" autocomplete="email">
+                        @error('email') <p class="error-msg">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="row-2col">
+                        <div class="form-group">
+                            <label class="form-label" for="password">Mot de passe</label>
+                            <div class="input-wrapper">
+                                <input id="password" type="password" name="password"
+                                    class="form-input" placeholder="••••••••"
+                                    autocomplete="new-password">
+                                <button type="button" class="toggle-password"
+                                    onclick="toggleVisibility('password', this)" tabindex="-1">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            @error('password') <p class="error-msg">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="password_confirmation">Confirmer</label>
+                            <div class="input-wrapper">
+                                <input id="password_confirmation" type="password"
+                                    name="password_confirmation" class="form-input"
+                                    placeholder="••••••••" autocomplete="new-password">
+                                <button type="button" class="toggle-password"
+                                    onclick="toggleVisibility('password_confirmation', this)" tabindex="-1">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Créer mon compte</button>
+                </form>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="password">Mot de passe</label>
-                <div class="input-wrapper">
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        class="form-input"
-                        autocomplete="new-password"
-                    >
-                    <button type="button" class="toggle-password" onclick="toggleVisibility('password', this)" tabindex="-1">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </button>
-                </div>
-                @error('password') <p class="error-msg">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="password_confirmation">Confirmer le mot de passe</label>
-                <div class="input-wrapper">
-                    <input
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        class="form-input"
-                        autocomplete="new-password"
-                    >
-                    <button type="button" class="toggle-password" onclick="toggleVisibility('password_confirmation', this)" tabindex="-1">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit">Créer mon compte</button>
-
-            <div class="divider">ou</div>
-
-            <a href="{{ route('login') }}" class="btn-login">Se connecter</a>
-        </form>
-    </div>
+        </div>
+    </main>
 
     <script>
         function toggleVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon  = btn.querySelector('svg');
             const isHidden = input.type === 'password';
-
             input.type = isHidden ? 'text' : 'password';
-
             if (isHidden) {
                 icon.innerHTML = `
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>

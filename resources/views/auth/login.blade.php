@@ -3,50 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion — Bibliothèque</title>
+    <title>Connexion — Biblio</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #f5f0eb;
+            background-color: #ede8e0;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5ddd4;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: #1a2332;
+            text-decoration: none;
+        }
+
+        .logo span { color: #c0844a; }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-text { font-size: 0.88rem; color: #6b7280; }
+
+        .btn-signup {
+            background-color: #1a2332;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 0.88rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-signup:hover { background-color: #2c3e55; }
+
+        /* ── Main area ── */
+        .main {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 40px 24px;
         }
 
         .card {
             background: #fff;
-            border-radius: 16px;
-            border: 1.5px solid #e5ddd4;
-            padding: 48px 44px;
+            border-radius: 20px;
+            border: 1px solid #e5ddd4;
+            box-shadow: 0 8px 40px rgba(26,35,50,0.08);
+            display: flex;
             width: 100%;
-            max-width: 440px;
-            box-shadow: 0 8px 40px rgba(26, 35, 50, 0.07);
+            max-width: 860px;
+            min-height: 460px;
+            overflow: hidden;
         }
 
-        .card-header { margin-bottom: 36px; }
+        /* ── Left : formulaire ── */
+        .form-side {
+            flex: 1;
+            padding: 52px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-        .card-title {
+        .page-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 2.1rem;
             color: #1a2332;
             letter-spacing: -0.5px;
+            margin-bottom: 28px;
         }
 
-        .card-subtitle { color: #9ca3af; font-size: 0.9rem; margin-top: 6px; }
-
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 18px; }
 
         .form-label {
             display: block;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: #374151;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
         }
 
         .form-input {
@@ -54,7 +112,7 @@
             border: 1.5px solid #d1c9be;
             border-radius: 9px;
             padding: 11px 14px;
-            font-size: 0.95rem;
+            font-size: 0.93rem;
             font-family: 'DM Sans', sans-serif;
             color: #1a2332;
             background: #faf8f5;
@@ -64,16 +122,13 @@
 
         .form-input:focus { border-color: #1a2332; background: #fff; }
 
-        /* wrapper pour input + icône */
         .input-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .input-wrapper .form-input {
-            padding-right: 44px;
-        }
+        .input-wrapper .form-input { padding-right: 44px; }
 
         .toggle-password {
             position: absolute;
@@ -90,44 +145,39 @@
 
         .toggle-password:hover { color: #1a2332; }
 
-        .error-msg { color: #c81e1e; font-size: 0.82rem; margin-top: 5px; }
-
         .form-error-block {
             background-color: #fef2f2;
             border: 1.5px solid #fca5a5;
             color: #991b1b;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.88rem;
+            margin-bottom: 18px;
+            font-size: 0.85rem;
         }
 
         .form-error-block ul { padding-left: 16px; }
         .form-error-block li { margin-top: 3px; }
 
-        .remember-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
+        .status-msg {
+            background-color: #ecfdf5;
+            border: 1.5px solid #6ee7b7;
+            color: #065f46;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 0.85rem;
         }
 
-        .remember-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.88rem;
-            color: #6b7280;
-            cursor: pointer;
+        .forgot-link {
+            display: block;
+            text-align: center;
+            font-size: 0.83rem;
+            color: #9ca3af;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: color 0.2s;
         }
 
-        .remember-label input[type="checkbox"] {
-            width: 15px;
-            height: 15px;
-            accent-color: #1a2332;
-        }
-
-        .forgot-link { font-size: 0.85rem; color: #9ca3af; text-decoration: none; transition: color 0.2s; }
         .forgot-link:hover { color: #1a2332; }
 
         .btn-submit {
@@ -142,144 +192,146 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s;
+            margin-top: 6px;
         }
 
         .btn-submit:hover { background-color: #2c3e55; }
 
-        .divider {
-            text-align: center;
-            color: #d1c9be;
-            font-size: 0.82rem;
-            margin: 20px 0;
-            position: relative;
+        .social-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 22px;
         }
 
-        .divider::before, .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: #e5ddd4;
-        }
+        .social-label { font-size: 0.82rem; color: #9ca3af; white-space: nowrap; }
 
-        .divider::before { left: 0; }
-        .divider::after  { right: 0; }
+        .social-icons { display: flex; gap: 10px; }
 
-        .btn-register {
-            width: 100%;
-            background-color: transparent;
-            color: #1a2332;
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             border: 1.5px solid #d1c9be;
-            border-radius: 9px;
-            padding: 12px;
-            font-size: 0.95rem;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            display: block;
+            color: #374151;
+            background: #fff;
             transition: border-color 0.2s, background 0.2s;
         }
 
-        .btn-register:hover { border-color: #1a2332; background-color: #f5f0eb; }
+        .social-btn:hover { border-color: #1a2332; background: #f5f0eb; }
 
-        .status-msg {
-            background-color: #ecfdf5;
-            border: 1.5px solid #6ee7b7;
-            color: #065f46;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.88rem;
+        /* ── Right : illustration ── */
+        .image-side {
+            width: 380px;
+            background: #dce8f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            flex-shrink: 0;
+        }
+
+        .image-side img {
+            width: 100%;
+            max-width: 300px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12));
+        }
+
+        @media (max-width: 700px) {
+            .image-side { display: none; }
+            .form-side { padding: 36px 28px; }
+            .topbar { padding: 14px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">Connexion</h1>
-            <p class="card-subtitle">Accédez à votre espace bibliothèque</p>
+    <header class="topbar">
+        <a href="/" class="logo">Gestion <span>Biblio</span></a>
+        <div class="topbar-right">
+            <span class="topbar-text">Pas encore de compte ?</span>
+            <a href="{{ route('register') }}" class="btn-signup">S'inscrire</a>
         </div>
+    </header>
 
-        @if (session('status'))
-            <div class="status-msg">{{ session('status') }}</div>
-        @endif
+    <main class="main">
+        <div class="card">
 
-        @if ($errors->any())
-            <div class="form-error-block">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            <!-- Gauche : formulaire -->
+            <div class="form-side">
+                <h1 class="page-title">Connexion</h1>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div class="form-group">
-                <label class="form-label" for="email">Adresse email</label>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    class="form-input"
-                    value="{{ old('email') }}"
-                    autocomplete="email"
-                    autofocus
-                >
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="password">Mot de passe</label>
-                <div class="input-wrapper">
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        class="form-input"
-                        autocomplete="current-password"
-                    >
-                    <button type="button" class="toggle-password" onclick="toggleVisibility('password', this)" tabindex="-1">
-                        <svg id="icon-password" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="remember-row">
-                <label class="remember-label">
-                    <input type="checkbox" name="remember">
-                    Se souvenir de moi
-                </label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="forgot-link">Mot de passe oublié ?</a>
+                @if (session('status'))
+                    <div class="status-msg">{{ session('status') }}</div>
                 @endif
+
+                @if ($errors->any())
+                    <div class="form-error-block">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Nom d'utilisateur ou Email</label>
+                        <input id="email" type="email" name="email" class="form-input"
+                            placeholder="Entrez votre adresse email"
+                            value="{{ old('email') }}" autocomplete="email" autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Mot de passe</label>
+                        <div class="input-wrapper">
+                            <input id="password" type="password" name="password" class="form-input"
+                                placeholder="Entrez votre mot de passe"
+                                autocomplete="current-password">
+                            <button type="button" class="toggle-password"
+                                onclick="toggleVisibility('password', this)" tabindex="-1">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Se connecter</button>
+
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="forgot-link">
+                            Mot de passe oublié ?
+                        </a>
+                    @endif
+                </form>
             </div>
 
-            <button type="submit" class="btn-submit">Se connecter</button>
+            <!-- Droite : illustration -->
+            <div class="image-side">
+                <img src="{{ asset('images/image_login.png') }}" alt="Livres illustrés">
+            </div>
 
-            <div class="divider">ou</div>
-
-            <a href="{{ route('register') }}" class="btn-register">Créer un compte</a>
-        </form>
-    </div>
+        </div>
+    </main>
 
     <script>
         function toggleVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon  = btn.querySelector('svg');
             const isHidden = input.type === 'password';
-
             input.type = isHidden ? 'text' : 'password';
-
-            // oeil ouvert = mot de passe visible, oeil barré = masqué
             if (isHidden) {
                 icon.innerHTML = `
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
