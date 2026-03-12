@@ -32,8 +32,7 @@ npm install
 
 4. **Configuration de la Base de Données**
 * Créez une base de données nommée `gestion_biblio` dans votre PHPMyAdmin.
-* Copiez le fichier d'exemple : `cp .env.example .env`
-* Modifiez votre fichier `.env` avec vos accès locaux :
+* Modifiez votre fichier `.env` avec vos accès locaux après la copie :
 ```env
 DB_DATABASE=gestion_biblio
 DB_USERNAME=root
@@ -42,6 +41,7 @@ DB_PASSWORD= (vide ou 'root')
 
 5. **Initialisation**
 ```bash
+cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
@@ -79,6 +79,26 @@ Une fois le seeder lancé, vous pouvez vous connecter avec ces comptes :
 
 ---
 
+## Commandes utiles
+
+**Vérifier et mettre à jour les emprunts en retard**
+```bash
+php artisan emprunts:verifier-retards
+```
+> Cette commande scanne tous les emprunts `en_cours` dont la date de retour prévue est dépassée. Elle passe leur statut à `en_retard` et bloque le droit d'emprunt (`can_borrow = 0`) du client concerné. Elle est planifiée automatiquement chaque jour à minuit via le Scheduler de Laravel.
+
+**Réinitialiser complètement la base de données**
+```bash
+php artisan migrate:fresh --seed
+```
+
+**Voir toutes les routes enregistrées**
+```bash
+php artisan route:list
+```
+
+---
+
 ## État actuel du projet
 
 | Étape | Description | Statut |
@@ -90,15 +110,15 @@ Une fois le seeder lancé, vous pouvez vous connecter avec ces comptes :
 | Étape 8 | Affichage catalogue livres | ✅ Terminé |
 | Étape 9 | Mise en page et design | ✅ Terminé |
 | Étape 10 | Formulaire ajout livre (Admin) | ✅ Terminé |
-| Étape 12 | Système d'Emprunt (Client) | ⏳ À faire |
-| Étape 13 | Mes Emprunts (Client) | ⏳ À faire |
-| Étape 14 | Gestion des Retours (Admin) | ⏳ À faire |
-| Étape 15 | Modifier et Supprimer un Livre (Admin) | ⏳ À faire |
-| Étape 16 | Gestion des Auteurs et Catégories (Admin) | ⏳ À faire |
-| Étape 17 | Tableau de Bord Admin (Statistiques) | ⏳ À faire |
-| Étape 18 | Gestion des Membres (Admin) | ⏳ À faire |
-| Étape 19 | Détection des Retards et Sanctions | ⏳ À faire |
-| Étape 20 | Tests finaux et Nettoyage du Code | ⏳ À faire |
+| Étape 12 | Système d'Emprunt (Client) | ✅ Terminé |
+| Étape 13 | Mes Emprunts (Client) | ✅ Terminé |
+| Étape 14 | Gestion des Retours (Admin) | ✅ Terminé |
+| Étape 15 | Modifier et Supprimer un Livre (Admin) | ✅ Terminé |
+| Étape 16 | Gestion des Auteurs et Catégories (Admin) | ✅ Terminé |
+| Étape 17 | Tableau de Bord Admin (Statistiques) | ✅ Terminé |
+| Étape 18 | Gestion des Membres (Admin) | ✅ Terminé |
+| Étape 19 | Détection des Retards et Sanctions | ✅ Terminé |
+| Étape 20 | Tests finaux et Nettoyage du Code | ✅ Terminé |
 
 ---
 
@@ -108,13 +128,13 @@ Le projet contient 6 tables :
 * `users` — les membres et administrateurs
 * `categories` — les catégories des livres
 * `authors` — les auteurs des livres
-* `books` — le catalogue des livres
+* `books` — le catalogue des livres (avec Soft Deletes)
 * `borrowings` — les emprunts
 * `sanctions` — les pénalités de retard
 
 ---
 
-## 📋 PROTOCOLE DE TRAVAIL (Important)
+## PROTOCOLE DE TRAVAIL (Important)
 
 Pour garantir une bonne note et assurer que le professeur voit l'activité de **chaque membre**, nous suivons strictement ce protocole hybride entre GitHub et le Drive.
 
@@ -133,7 +153,7 @@ Mettez à jour notre fichier Google Sheet en passant le statut de votre tâche d
 
 ---
 
-### ⚠️ Règles de sécurité et de synchronisation
+### Règles de sécurité et de synchronisation
 
 * **AVANT DE COMMENCER N'OUBLIER PAS :** Faites toujours un `git fetch` puis `git pull`. Si vous travaillez sur une version périmée, vous allez créer des erreurs lors de l'upload.
 
@@ -142,9 +162,9 @@ Mettez à jour notre fichier Google Sheet en passant le statut de votre tâche d
 php artisan migrate
 php artisan db:seed
 ```
-> ⚠️ Attention : si vous avez déjà des données dans votre base, le `db:seed` va dupliquer les données. Dans ce cas faites plutôt `php artisan migrate:fresh --seed` qui repart de zéro.
+> Attention : si vous avez déjà des données dans votre base, le `db:seed` va dupliquer les données. Dans ce cas faites plutôt `php artisan migrate:fresh --seed` qui repart de zéro.
 
-* **FICHIERS INTERDITS SUR LE DRIVE !!! :**
+* **FICHIERS INTERDITS SUR LE DRIVE :**
   * Ne jamais uploader le dossier `vendor/` ou `node_modules/`
   * Ne jamais remplacer le fichier `.env` (gardez votre config locale)
 
