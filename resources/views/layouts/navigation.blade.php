@@ -17,16 +17,19 @@
                         </x-nav-link>
                     @endif
 
+                    {{-- j'ajoute le lien vers le catalogue de livres --}}
                     <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                         {{ __('Livres') }}
                     </x-nav-link>
 
+                    {{-- lien Mes Emprunts visible seulement pour le client --}}
                     @if(Auth::user()->role == 'client')
                         <x-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
                             {{ __('Mes Emprunts') }}
                         </x-nav-link>
                     @endif
 
+                    {{-- liens admin --}}
                     @if(Auth::user()->role == 'admin')
                         <x-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                             {{ __('Retours') }}
@@ -36,6 +39,9 @@
                         </x-nav-link>
                         <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                             {{ __('Catégories') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.membres.index')" :active="request()->routeIs('admin.membres.*')">
+                            {{ __('Membres') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -90,16 +96,19 @@
                 </x-responsive-nav-link>
             @endif
 
+            {{-- lien livres pour mobile aussi --}}
             <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
                 {{ __('Livres') }}
             </x-responsive-nav-link>
 
+            {{-- lien Mes Emprunts pour mobile --}}
             @if(Auth::user()->role == 'client')
                 <x-responsive-nav-link :href="route('borrowings.mes-emprunts')" :active="request()->routeIs('borrowings.mes-emprunts')">
                     {{ __('Mes Emprunts') }}
                 </x-responsive-nav-link>
             @endif
 
+            {{-- liens admin mobile --}}
             @if(Auth::user()->role == 'admin')
                 <x-responsive-nav-link :href="route('admin.emprunts')" :active="request()->routeIs('admin.emprunts')">
                     {{ __('Retours') }}
@@ -109,6 +118,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                     {{ __('Catégories') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.membres.index')" :active="request()->routeIs('admin.membres.*')">
+                    {{ __('Membres') }}
                 </x-responsive-nav-link>
             @endif
         </div>

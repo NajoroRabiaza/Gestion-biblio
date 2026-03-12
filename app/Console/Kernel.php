@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // ici je vérifie les retards chaque jour à minuit
+        $schedule->command('emprunts:verifier-retards')->daily();
     }
 
     /**

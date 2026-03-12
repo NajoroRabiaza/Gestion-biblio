@@ -10,10 +10,21 @@ use App\Models\Borrowing;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::with('author', 'category')->get();
-        return view('books.index', compact('books'));
+        // ici  j'affiche tous les livres, filtrés par titre ou auteur si une recherche est saisie
+        $recherche = $request->input('q');
+
+        $books = Book::with('author', 'category')
+            ->when($recherche, function ($query) use ($recherche) {
+                $query->where('title', 'like', '%' . $recherche . '%')
+                      ->orWhereHas('author', function ($q) use ($recherche) {
+                          $q->where('name', 'like', '%' . $recherche . '%');
+                      });
+            })
+            ->get();
+
+        return view('books.index', compact('books', 'recherche'));
     }
 
     public function create()

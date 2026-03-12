@@ -40,4 +40,8 @@ Route::get('/admin/categories/create', [App\Http\Controllers\CategoryController:
 Route::post('/admin/categories', [App\Http\Controllers\CategoryController::class, 'store'])->middleware('admin')->name('admin.categories.store');
 Route::delete('/admin/categories/{id}', [App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('admin')->name('admin.categories.destroy');
 
+// gestion membres — admin seulement
+Route::get('/admin/membres', [App\Http\Controllers\MemberController::class, 'index'])->middleware('admin')->name('admin.membres.index');
+Route::post('/admin/membres/{id}/toggle', [App\Http\Controllers\MemberController::class, 'toggleActif'])->middleware('admin')->name('admin.membres.toggle');
+
 require __DIR__.'/auth.php';
