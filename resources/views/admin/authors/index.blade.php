@@ -32,6 +32,24 @@
         .btn-primary { background-color: #1a2332; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-primary:hover { background-color: #2c3e55; }
 
+        .btn-refresh {
+            background: #fff;
+            border: 1.5px solid #e5ddd4;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            color: #1a2332;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .btn-refresh:hover { border-color: #1a2332; background: #f5f0eb; }
+        .btn-refresh svg { transition: transform 0.5s ease; }
+        .btn-refresh.spinning svg { transform: rotate(360deg); }
+
         /* icône poubelle */
         .btn-icon-delete {
             background: #1a2332;
@@ -98,6 +116,13 @@
                     <p class="subtitle" id="subtitle">{{ $authors->count() }} auteur(s) enregistré(s)</p>
                 </div>
                 <a href="{{ route('admin.authors.create') }}" class="btn-primary">+ Ajouter un auteur</a>
+                <button class="btn-refresh" onclick="actualiser(this)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Actualiser
+                </button>
             </div>
 
             @if($authors->isEmpty())
@@ -166,6 +191,11 @@
                 toast.classList.remove('show');
                 toast.classList.add('hide');
             }, 3000);
+        }
+
+        function actualiser(btn) {
+            btn.classList.add('spinning');
+            setTimeout(() => window.location.reload(), 500);
         }
 
         function supprimerAuteur(btn) {

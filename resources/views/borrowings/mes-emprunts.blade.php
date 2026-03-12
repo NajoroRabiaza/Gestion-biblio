@@ -21,6 +21,24 @@
 
         .subtitle { color: #6b7280; font-size: 0.95rem; margin-top: 4px; }
 
+        .btn-refresh {
+            background: #fff;
+            border: 1.5px solid #e5ddd4;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            color: #1a2332;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .btn-refresh:hover { border-color: #1a2332; background: #f5f0eb; }
+        .btn-refresh svg { transition: transform 0.5s ease; }
+        .btn-refresh.spinning svg { transform: rotate(360deg); }
+
         .emprunt-card {
             background: #fff;
             border-radius: 12px;
@@ -153,9 +171,18 @@
     <div class="page-bg py-10 px-4">
         <div style="max-width: 900px; margin: 0 auto;">
 
-            <div style="margin-bottom: 28px;">
-                <h1 class="section-title">Mes Emprunts</h1>
-                <p class="subtitle">Historique de tous vos emprunts</p>
+            <div style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1 class="section-title">Mes Emprunts</h1>
+                    <p class="subtitle">Historique de tous vos emprunts</p>
+                </div>
+                <button class="btn-refresh" onclick="actualiser(this)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Actualiser
+                </button>
             </div>
 
             <div class="stats-bar">
@@ -242,6 +269,11 @@
     </div>
 
     <script>
+        function actualiser(btn) {
+            btn.classList.add('spinning');
+            setTimeout(() => window.location.reload(), 500);
+        }
+
         let toastTimer = null;
 
         function showToast(message, type) {
