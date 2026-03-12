@@ -25,7 +25,7 @@ class BorrowingController extends Controller
         }
 
         if (!$user->can_borrow) {
-            return response()->json(['success' => false, 'message' => 'Votre compte ne peut pas effectuer d\'emprunts pour le moment.']);
+            return response()->json(['success' => false, 'message' => 'Votre compte ne peut pas effectuer d\'emprunts pour le moment, veuillez rendre les livres en retard.']);
         }
 
         $dejaEmprunte = Borrowing::where('user_id', $user->id)
