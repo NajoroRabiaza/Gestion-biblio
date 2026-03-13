@@ -284,7 +284,7 @@
                     @csrf
 
                     <div class="form-group">
-                        <label class="form-label" for="email">Nom d'utilisateur ou Email</label>
+                        <label class="form-label" for="email">Adresse Email</label>
                         <input id="email" type="email" name="email" class="form-input"
                             placeholder="Entrez votre adresse email"
                             value="{{ old('email') }}" autocomplete="email" autofocus>
